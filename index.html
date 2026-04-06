@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1B2A4A">
+    <title>Pesquisa de Satisfação - E-log</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- ========== TELA DE BLOQUEIO (já respondeu em <12h) ========== -->
+    <div id="tela-bloqueio" class="tela" style="display:none;">
+        <div class="header">
+            <div class="logo">e-log</div>
+        </div>
+        <div class="container bloqueio-container">
+            <div class="bloqueio-icon">⏳</div>
+            <h2>Você já respondeu esta pesquisa recentemente.</h2>
+            <p>Por favor, aguarde 12 horas para responder novamente.</p>
+        </div>
+    </div>
+
+    <!-- ========== APP PRINCIPAL ========== -->
+    <div id="app">
+        <!-- Header fixo -->
+        <div class="header">
+            <div class="logo">e-log</div>
+            <div class="header-title">Pesquisa de Satisfação</div>
+        </div>
+
+        <!-- Barra de progresso -->
+        <div class="progress-wrapper">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+            </div>
+            <div class="progress-text" id="progress-text">Etapa 1 de 5</div>
+        </div>
+
+        <!-- ===== TELA 1: Início e Identificação ===== -->
+        <div class="tela tela-ativa" id="tela-1">
+            <div class="container">
+                <h2 class="tela-titulo">Identificação</h2>
+
+                <!-- Pergunta 1: Região de Origem -->
+                <div class="campo" id="campo-regiao">
+                    <label class="campo-label">Qual a sua região de origem?</label>
+                    <div class="select-wrapper">
+                        <select id="regiao" required>
+                            <option value="">Selecione sua região</option>
+                            <option value="Norte">Norte</option>
+                            <option value="Nordeste">Nordeste</option>
+                            <option value="Centro-Oeste">Centro-Oeste</option>
+                            <option value="Sudeste">Sudeste</option>
+                            <option value="Sul">Sul</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Pergunta 2: Tipo de Veículo -->
+                <div class="campo" id="campo-veiculo">
+                    <label class="campo-label">Qual o seu veículo principal?</label>
+                    <div class="veiculo-grid">
+                        <button class="veiculo-btn" data-value="Truck" type="button">
+                            <svg viewBox="0 0 64 44" class="veiculo-icon">
+                                <rect x="0" y="8" width="40" height="24" rx="3" fill="currentColor"/>
+                                <rect x="40" y="14" width="20" height="18" rx="3" fill="currentColor"/>
+                                <polygon points="42,14 42,8 56,8 60,14" fill="currentColor"/>
+                                <rect x="44" y="8" width="10" height="8" rx="1" fill="#fff" opacity="0.3"/>
+                                <circle cx="14" cy="36" r="6" fill="#333"/><circle cx="14" cy="36" r="3" fill="#999"/>
+                                <circle cx="50" cy="36" r="6" fill="#333"/><circle cx="50" cy="36" r="3" fill="#999"/>
+                            </svg>
+                            <span>Truck</span>
+                        </button>
+                        <button class="veiculo-btn" data-value="Carreta" type="button">
+                            <svg viewBox="0 0 80 44" class="veiculo-icon">
+                                <rect x="0" y="10" width="48" height="22" rx="3" fill="currentColor"/>
+                                <rect x="50" y="14" width="26" height="18" rx="3" fill="currentColor"/>
+                                <polygon points="52,14 52,6 72,6 76,14" fill="currentColor"/>
+                                <rect x="56" y="6" width="12" height="10" rx="1" fill="#fff" opacity="0.3"/>
+                                <circle cx="12" cy="36" r="5" fill="#333"/><circle cx="12" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="30" cy="36" r="5" fill="#333"/><circle cx="30" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="64" cy="36" r="5" fill="#333"/><circle cx="64" cy="36" r="2.5" fill="#999"/>
+                            </svg>
+                            <span>Carreta</span>
+                        </button>
+                        <button class="veiculo-btn" data-value="Bitrem / Rodotrem" type="button">
+                            <svg viewBox="0 0 100 44" class="veiculo-icon">
+                                <rect x="0" y="12" width="30" height="20" rx="3" fill="currentColor"/>
+                                <rect x="32" y="12" width="30" height="20" rx="3" fill="currentColor"/>
+                                <rect x="66" y="14" width="30" height="18" rx="3" fill="currentColor"/>
+                                <polygon points="68,14 68,6 90,6 96,14" fill="currentColor"/>
+                                <rect x="72" y="6" width="14" height="10" rx="1" fill="#fff" opacity="0.3"/>
+                                <circle cx="10" cy="36" r="5" fill="#333"/><circle cx="10" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="24" cy="36" r="5" fill="#333"/><circle cx="24" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="42" cy="36" r="5" fill="#333"/><circle cx="42" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="56" cy="36" r="5" fill="#333"/><circle cx="56" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="82" cy="36" r="5" fill="#333"/><circle cx="82" cy="36" r="2.5" fill="#999"/>
+                            </svg>
+                            <span>Bitrem / Rodotrem</span>
+                        </button>
+                        <button class="veiculo-btn" data-value="Outro" type="button">
+                            <svg viewBox="0 0 64 44" class="veiculo-icon">
+                                <rect x="8" y="12" width="48" height="20" rx="3" fill="currentColor"/>
+                                <circle cx="22" cy="36" r="5" fill="#333"/><circle cx="22" cy="36" r="2.5" fill="#999"/>
+                                <circle cx="42" cy="36" r="5" fill="#333"/><circle cx="42" cy="36" r="2.5" fill="#999"/>
+                                <text x="32" y="26" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">?</text>
+                            </svg>
+                            <span>Outro</span>
+                        </button>
+                    </div>
+                    <div class="veiculo-outro-input" id="veiculo-outro-wrapper" style="display:none;">
+                        <input type="text" id="veiculo-outro-text" class="input-outro" placeholder="Digite o tipo do veículo...">
+                    </div>
+                </div>
+
+                <button class="btn-proximo" id="btn-tela1" type="button" disabled>PRÓXIMO</button>
+            </div>
+        </div>
+
+        <!-- ===== TELA 2: Entrada e Atendimento ===== -->
+        <div class="tela" id="tela-2">
+            <div class="container">
+                <h2 class="tela-titulo">Entrada e Atendimento</h2>
+
+                <!-- Pergunta 3: Atendimento recepção -->
+                <div class="campo" id="campo-atendimento">
+                    <label class="campo-label">Como você avalia o atendimento na recepção?</label>
+                    <div class="star-rating" data-name="atendimento_recepcao">
+                        <button type="button" class="star" data-value="1" title="Muito Ruim">★</button>
+                        <button type="button" class="star" data-value="2" title="Ruim">★</button>
+                        <button type="button" class="star" data-value="3" title="Regular">★</button>
+                        <button type="button" class="star" data-value="4" title="Bom">★</button>
+                        <button type="button" class="star" data-value="5" title="Excelente">★</button>
+                    </div>
+                    <div class="star-labels">
+                        <span>Muito Ruim</span>
+                        <span>Excelente</span>
+                    </div>
+                    <!-- Lógica ativa: nota ≤3 -->
+                    <div class="condicional" id="motivo-atendimento" style="display:none;">
+                        <label class="campo-label sub-label">Selecione o motivo:</label>
+                        <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Demora na fila"> Demora na fila</label>
+                            <label class="check-item"><input type="checkbox" value="Atendimento ríspido"> Atendimento ríspido</label>
+                            <label class="check-item"><input type="checkbox" value="Problemas no sistema"> Problemas no sistema</label>
+                            <label class="check-item">
+                                <input type="checkbox" value="Outro" class="check-outro">
+                                Outro:
+                                <input type="text" class="input-outro" placeholder="Especifique..." disabled>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4: Regras de segurança -->
+                <div class="campo" id="campo-seguranca-regras">
+                    <label class="campo-label">Você conhece as informações e regras de segurança do pátio?</label>
+                    <div class="opcoes-grupo">
+                        <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Sim">Sim</button>
+                        <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Parcialmente">Parcialmente</button>
+                        <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Não">Não</button>
+                    </div>
+                </div>
+
+                <button class="btn-proximo" id="btn-tela2" type="button" disabled>PRÓXIMO</button>
+            </div>
+        </div>
+
+        <!-- ===== TELA 3: Infraestrutura e Higiene ===== -->
+        <div class="tela" id="tela-3">
+            <div class="container">
+                <h2 class="tela-titulo">Infraestrutura e Higiene</h2>
+
+                <!-- Pergunta 5: Limpeza áreas comuns -->
+                <div class="campo" id="campo-limpeza">
+                    <label class="campo-label">Como você avalia a limpeza e conservação das áreas comuns?</label>
+                    <p class="campo-descricao">Banheiros, pátio, refeitório e áreas de descanso</p>
+                    <div class="star-rating" data-name="limpeza">
+                        <button type="button" class="star" data-value="1" title="Péssima">★</button>
+                        <button type="button" class="star" data-value="2" title="Ruim">★</button>
+                        <button type="button" class="star" data-value="3" title="Regular">★</button>
+                        <button type="button" class="star" data-value="4" title="Boa">★</button>
+                        <button type="button" class="star" data-value="5" title="Impecável">★</button>
+                    </div>
+                    <div class="star-labels">
+                        <span>Péssima</span>
+                        <span>Impecável</span>
+                    </div>
+                    <div class="condicional" id="motivo-limpeza" style="display:none;">
+                        <label class="campo-label sub-label">Qual área precisa melhorar?</label>
+                        <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Banheiros e Chuveiros (Sujeira/Falta de materiais)"> Banheiros e Chuveiros</label>
+                            <label class="check-item"><input type="checkbox" value="Pátio e Estacionamento (Lixo/Resíduos)"> Pátio e Estacionamento</label>
+                            <label class="check-item"><input type="checkbox" value="Refeitório e Áreas de Refeição"> Refeitório e Áreas de Refeição</label>
+                            <label class="check-item"><input type="checkbox" value="Salas de Espera e Corredores"> Salas de Espera e Corredores</label>
+                            <label class="check-item">
+                                <input type="checkbox" value="Outro" class="check-outro">
+                                Outro:
+                                <input type="text" class="input-outro" placeholder="Especifique..." disabled>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 6: Restaurante -->
+                <div class="campo" id="campo-restaurante">
+                    <label class="campo-label">Como você avalia a sua experiência geral no restaurante?</label>
+                    <p class="campo-descricao">Considere comida, atendimento e ambiente</p>
+                    <div class="star-rating" data-name="restaurante">
+                        <button type="button" class="star" data-value="1" title="Muito Ruim">★</button>
+                        <button type="button" class="star" data-value="2" title="Ruim">★</button>
+                        <button type="button" class="star" data-value="3" title="Regular">★</button>
+                        <button type="button" class="star" data-value="4" title="Bom">★</button>
+                        <button type="button" class="star" data-value="5" title="Excelente">★</button>
+                    </div>
+                    <div class="star-labels">
+                        <span>Muito Ruim</span>
+                        <span>Excelente</span>
+                    </div>
+                    <div class="condicional" id="motivo-restaurante" style="display:none;">
+                        <label class="campo-label sub-label">Selecione o motivo:</label>
+                        <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Pouca variedade"> Pouca variedade</label>
+                            <label class="check-item"><input type="checkbox" value="Baixa qualidade"> Baixa qualidade</label>
+                            <label class="check-item"><input type="checkbox" value="Ambiente desconfortável"> Ambiente desconfortável</label>
+                            <label class="check-item"><input type="checkbox" value="Mal atendimento"> Mal atendimento</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 7: Serviços -->
+                <div class="campo" id="campo-servicos">
+                    <label class="campo-label">Como você avalia a qualidade dos serviços disponibilizados?</label>
+                    <p class="campo-descricao">Ex: Barbearia, lavanderia, etc.</p>
+                    <div class="star-rating" data-name="servicos">
+                        <button type="button" class="star" data-value="1" title="Muito Ruim">★</button>
+                        <button type="button" class="star" data-value="2" title="Ruim">★</button>
+                        <button type="button" class="star" data-value="3" title="Regular">★</button>
+                        <button type="button" class="star" data-value="4" title="Bom">★</button>
+                        <button type="button" class="star" data-value="5" title="Excelente">★</button>
+                    </div>
+                    <div class="star-labels">
+                        <span>Muito Ruim</span>
+                        <span>Excelente</span>
+                    </div>
+                    <div class="condicional" id="motivo-servicos" style="display:none;">
+                        <label class="campo-label sub-label">Selecione o motivo:</label>
+                        <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Equipamentos estragados ou indisponíveis"> Equipamentos estragados ou indisponíveis</label>
+                            <label class="check-item"><input type="checkbox" value="Tempo de espera muito longo"> Tempo de espera muito longo</label>
+                            <label class="check-item"><input type="checkbox" value="Ambiente sujo ou mal cuidado"> Ambiente sujo ou mal cuidado</label>
+                            <label class="check-item"><input type="checkbox" value="Atendimento ruim do prestador"> Atendimento ruim do prestador</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-proximo" id="btn-tela3" type="button" disabled>PRÓXIMO</button>
+            </div>
+        </div>
+
+        <!-- ===== TELA 4: Segurança e Recomendação ===== -->
+        <div class="tela" id="tela-4">
+            <div class="container">
+                <h2 class="tela-titulo">Segurança e Recomendação</h2>
+
+                <!-- Pergunta 8: Segurança -->
+                <div class="campo" id="campo-seguranca">
+                    <label class="campo-label">Você se sente seguro no E-log?</label>
+                    <div class="opcoes-grupo">
+                        <button type="button" class="opcao-btn" data-name="seguranca" data-value="Sim">Sim</button>
+                        <button type="button" class="opcao-btn" data-name="seguranca" data-value="Parcialmente">Parcialmente</button>
+                        <button type="button" class="opcao-btn" data-name="seguranca" data-value="Não">Não</button>
+                    </div>
+                    <div class="condicional" id="motivo-seguranca" style="display:none;">
+                        <label class="campo-label sub-label">O que poderia melhorar?</label>
+                        <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Pouca iluminação noturna"> Pouca iluminação noturna</label>
+                            <label class="check-item"><input type="checkbox" value="Falta de vigilantes"> Falta de vigilantes</label>
+                            <label class="check-item"><input type="checkbox" value="Sinalização"> Sinalização</label>
+                            <label class="check-item"><input type="checkbox" value="Piso"> Piso</label>
+                            <label class="check-item">
+                                <input type="checkbox" value="Outros" class="check-outro">
+                                Outros:
+                                <input type="text" class="input-outro" placeholder="Especifique..." disabled>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 9: NPS -->
+                <div class="campo" id="campo-nps">
+                    <label class="campo-label">Em uma escala de 0 a 10, qual o seu nível de satisfação com a sua estadia no E-log?</label>
+                    <div class="nps-scale">
+                        <button type="button" class="nps-btn" data-value="0">0</button>
+                        <button type="button" class="nps-btn" data-value="1">1</button>
+                        <button type="button" class="nps-btn" data-value="2">2</button>
+                        <button type="button" class="nps-btn" data-value="3">3</button>
+                        <button type="button" class="nps-btn" data-value="4">4</button>
+                        <button type="button" class="nps-btn" data-value="5">5</button>
+                        <button type="button" class="nps-btn" data-value="6">6</button>
+                        <button type="button" class="nps-btn" data-value="7">7</button>
+                        <button type="button" class="nps-btn" data-value="8">8</button>
+                        <button type="button" class="nps-btn" data-value="9">9</button>
+                        <button type="button" class="nps-btn" data-value="10">10</button>
+                    </div>
+                    <div class="nps-labels">
+                        <span>Nada provável</span>
+                        <span>Muito provável</span>
+                    </div>
+                    <!-- NPS Detrator (0-6) -->
+                    <div class="condicional" id="nps-detrator" style="display:none;">
+                        <label class="campo-label sub-label">Qual o principal motivo da sua resposta?</label>
+                        <textarea id="motivo-detrator" class="textarea" rows="3" placeholder="Conte-nos o que podemos melhorar..."></textarea>
+                    </div>
+                    <!-- NPS Promotor (9-10) -->
+                    <div class="condicional" id="nps-promotor" style="display:none;">
+                        <label class="campo-label sub-label">O que mais te agradou no E-log?</label>
+                        <textarea id="motivo-promotor" class="textarea" rows="3" placeholder="Conte-nos o que você mais gostou..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn-proximo" id="btn-tela4" type="button" disabled>PRÓXIMO</button>
+            </div>
+        </div>
+
+        <!-- ===== TELA 5: Espaço Livre e Envio ===== -->
+        <div class="tela" id="tela-5">
+            <div class="container">
+                <h2 class="tela-titulo">Espaço Livre</h2>
+
+                <!-- Pergunta 10: Sugestões -->
+                <div class="campo">
+                    <label class="campo-label">Elogios ou sugestões de melhoria</label>
+                    <p class="campo-descricao">Este campo é opcional</p>
+                    <textarea id="sugestoes" class="textarea" rows="5" placeholder="Deixe aqui seu comentário, elogio ou sugestão..."></textarea>
+                </div>
+
+                <button class="btn-enviar" id="btn-enviar" type="button">ENVIAR PESQUISA</button>
+            </div>
+        </div>
+
+        <!-- ===== PÁGINA DE AGRADECIMENTO ===== -->
+        <div class="tela" id="tela-obrigado">
+            <div class="container obrigado-container">
+                <div class="obrigado-icon">✓</div>
+                <h2>Obrigado!</h2>
+                <p class="obrigado-msg">A E-log agradece sua contribuição, motorista.</p>
+                <p class="obrigado-sub">Sua opinião é essencial para melhorarmos nossos serviços.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" style="display:none;">
+        <div class="spinner"></div>
+        <p>Enviando pesquisa...</p>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
