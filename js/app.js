@@ -182,6 +182,17 @@ function inicializarOpcoes() {
                 }
             }
 
+            // Lógica condicional para utilização de serviços
+            if (name === 'utiliza_servicos') {
+                const listaServicos = document.getElementById('lista-servicos');
+                if (btn.dataset.value === 'Sim') {
+                    listaServicos.style.display = 'block';
+                } else {
+                    listaServicos.style.display = 'none';
+                    listaServicos.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+                }
+            }
+
             validarTelaAtual();
         });
     });
@@ -256,28 +267,38 @@ function inicializarBotoes() {
 // ===== LÓGICA CONDICIONAL =====
 function tratarLogicaCondicional(name, valor) {
     const mapa = {
-        'atendimento_recepcao': 'motivo-atendimento',
-        'limpeza': 'motivo-limpeza',
-        'restaurante': 'motivo-restaurante',
-        'servicos': 'motivo-servicos'
+        'atendimento_recepcao': { motivo: 'motivo-atendimento', agradou: 'agradou-atendimento' },
+        'limpeza':              { motivo: 'motivo-limpeza',      agradou: 'agradou-limpeza' },
+        'restaurante':          { motivo: 'motivo-restaurante',  agradou: 'agradou-restaurante' },
+        'servicos':             { motivo: 'motivo-servicos',     agradou: 'agradou-servicos' }
     };
 
-    const elementoId = mapa[name];
-    if (!elementoId) return;
+    const ids = mapa[name];
+    if (!ids) return;
 
-    const elemento = document.getElementById(elementoId);
+    const elMotivo  = document.getElementById(ids.motivo);
+    const elAgradou = document.getElementById(ids.agradou);
+
     if (valor <= 3) {
-        elemento.style.display = 'block';
+        if (elMotivo)  elMotivo.style.display  = 'block';
+        if (elAgradou) {
+            elAgradou.style.display = 'none';
+            const ta = elAgradou.querySelector('textarea');
+            if (ta) ta.value = '';
+        }
     } else {
-        elemento.style.display = 'none';
-        // Limpar checkboxes quando esconde
-        elemento.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.checked = false;
-        });
-        elemento.querySelectorAll('.input-outro').forEach(inp => {
-            inp.value = '';
-            inp.disabled = true;
-        });
+        if (elMotivo) {
+            elMotivo.style.display = 'none';
+            // Limpar checkboxes quando esconde
+            elMotivo.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            elMotivo.querySelectorAll('.input-outro').forEach(inp => {
+                inp.value = '';
+                inp.disabled = true;
+            });
+        }
+        if (elAgradou) elAgradou.style.display = 'block';
     }
 }
 
@@ -297,10 +318,10 @@ function validarTela(numTela) {
             valido = state.respostas.regiao && state.respostas.veiculo;
             break;
         case 2:
-            valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras;
+            valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras && state.respostas.circulacao_clara;
             break;
         case 3:
-            valido = state.respostas.limpeza && state.respostas.restaurante && state.respostas.servicos;
+            valido = state.respostas.limpeza && state.respostas.restaurante && state.respostas.utiliza_servicos && state.respostas.servicos;
             break;
         case 4:
             valido = state.respostas.seguranca !== undefined && state.respostas.nps !== undefined;
@@ -371,15 +392,22 @@ function coletarTodosOsDados() {
         // Atendimento
         atendimento_recepcao: state.respostas.atendimento_recepcao || null,
         motivos_atendimento: coletarMotivos('motivo-atendimento'),
+        agradou_atendimento: document.getElementById('agradou-atendimento-text')?.value.trim() || '',
         conhece_regras: state.respostas.conhece_regras || '',
+        circulacao_clara: state.respostas.circulacao_clara || '',
 
         // Infraestrutura
         limpeza: state.respostas.limpeza || null,
         motivos_limpeza: coletarMotivos('motivo-limpeza'),
+        agradou_limpeza: document.getElementById('agradou-limpeza-text')?.value.trim() || '',
         restaurante: state.respostas.restaurante || null,
         motivos_restaurante: coletarMotivos('motivo-restaurante'),
+        agradou_restaurante: document.getElementById('agradou-restaurante-text')?.value.trim() || '',
+        utiliza_servicos: state.respostas.utiliza_servicos || '',
+        servicos_utilizados: coletarMotivos('lista-servicos'),
         servicos: state.respostas.servicos || null,
         motivos_servicos: coletarMotivos('motivo-servicos'),
+        agradou_servicos: document.getElementById('agradou-servicos-text')?.value.trim() || '',
 
         // Segurança e NPS
         seguranca: state.respostas.seguranca || '',
@@ -586,7 +614,7 @@ function restaurarUI() {
     });
 
     // Opções (Sim/Parcialmente/Não)
-    ['conhece_regras', 'seguranca'].forEach(name => {
+    ['conhece_regras', 'circulacao_clara', 'utiliza_servicos', 'seguranca'].forEach(name => {
         if (state.respostas[name]) {
             document.querySelectorAll(`.opcao-btn[data-name="${name}"]`).forEach(btn => {
                 if (btn.dataset.value === state.respostas[name]) {
@@ -598,6 +626,12 @@ function restaurarUI() {
                 const val = state.respostas[name];
                 if (val === 'Não' || val === 'Parcialmente') {
                     document.getElementById('motivo-seguranca').style.display = 'block';
+                }
+            }
+
+            if (name === 'utiliza_servicos') {
+                if (state.respostas[name] === 'Sim') {
+                    document.getElementById('lista-servicos').style.display = 'block';
                 }
             }
         }

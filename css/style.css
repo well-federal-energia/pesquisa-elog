@@ -69,11 +69,11 @@ body {
     z-index: 100;
 }
 
-.logo {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--primary);
-    letter-spacing: -0.5px;
+.logo-img {
+    height: 36px;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
 }
 
 .header-title {

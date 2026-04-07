@@ -11,7 +11,7 @@
     <!-- ========== TELA DE BLOQUEIO (já respondeu em <12h) ========== -->
     <div id="tela-bloqueio" class="tela" style="display:none;">
         <div class="header">
-            <div class="logo">e-log</div>
+            <img src="Gemini_Generated_Image_ybwvb1ybwvb1ybwv-removebg-preview.png" alt="E-log Pátio de Triagem" class="logo-img">
         </div>
         <div class="container bloqueio-container">
             <div class="bloqueio-icon">⏳</div>
@@ -24,7 +24,7 @@
     <div id="app">
         <!-- Header fixo -->
         <div class="header">
-            <div class="logo">e-log</div>
+            <img src="Gemini_Generated_Image_ybwvb1ybwvb1ybwv-removebg-preview.png" alt="E-log Pátio de Triagem" class="logo-img">
             <div class="header-title">Pesquisa de Satisfação</div>
         </div>
 
@@ -140,7 +140,7 @@
                     <div class="condicional" id="motivo-atendimento" style="display:none;">
                         <label class="campo-label sub-label">Selecione o motivo:</label>
                         <div class="checklist">
-                            <label class="check-item"><input type="checkbox" value="Demora na fila"> Demora na fila</label>
+                            <label class="check-item"><input type="checkbox" value="Demora na Triagem"> Demora na Triagem</label>
                             <label class="check-item"><input type="checkbox" value="Atendimento ríspido"> Atendimento ríspido</label>
                             <label class="check-item"><input type="checkbox" value="Problemas no sistema"> Problemas no sistema</label>
                             <label class="check-item">
@@ -149,6 +149,11 @@
                                 <input type="text" class="input-outro" placeholder="Especifique..." disabled>
                             </label>
                         </div>
+                    </div>
+                    <!-- Lógica ativa: nota ≥4 -->
+                    <div class="condicional" id="agradou-atendimento" style="display:none;">
+                        <label class="campo-label sub-label">O que mais te agradou?</label>
+                        <textarea id="agradou-atendimento-text" class="textarea" rows="2" placeholder="Opcional..."></textarea>
                     </div>
                 </div>
 
@@ -159,6 +164,16 @@
                         <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Sim">Sim</button>
                         <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Parcialmente">Parcialmente</button>
                         <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Não">Não</button>
+                    </div>
+                </div>
+
+                <!-- Pergunta X: Regras de circulação -->
+                <div class="campo" id="campo-circulacao">
+                    <label class="campo-label">As regras de circulação estavam claras?</label>
+                    <div class="opcoes-grupo">
+                        <button type="button" class="opcao-btn" data-name="circulacao_clara" data-value="Sim">Sim</button>
+                        <button type="button" class="opcao-btn" data-name="circulacao_clara" data-value="Parcialmente">Parcialmente</button>
+                        <button type="button" class="opcao-btn" data-name="circulacao_clara" data-value="Não">Não</button>
                     </div>
                 </div>
 
@@ -200,6 +215,11 @@
                             </label>
                         </div>
                     </div>
+                    <!-- Lógica ativa: nota ≥4 -->
+                    <div class="condicional" id="agradou-limpeza" style="display:none;">
+                        <label class="campo-label sub-label">O que mais te agradou?</label>
+                        <textarea id="agradou-limpeza-text" class="textarea" rows="2" placeholder="Opcional..."></textarea>
+                    </div>
                 </div>
 
                 <!-- Pergunta 6: Restaurante -->
@@ -226,9 +246,34 @@
                             <label class="check-item"><input type="checkbox" value="Mal atendimento"> Mal atendimento</label>
                         </div>
                     </div>
+                    <!-- Lógica ativa: nota ≥4 -->
+                    <div class="condicional" id="agradou-restaurante" style="display:none;">
+                        <label class="campo-label sub-label">O que mais te agradou?</label>
+                        <textarea id="agradou-restaurante-text" class="textarea" rows="2" placeholder="Opcional..."></textarea>
+                    </div>
                 </div>
 
-                <!-- Pergunta 7: Serviços -->
+                <!-- Pergunta 7: Você utiliza serviços? -->
+                <div class="campo" id="campo-utiliza-servicos">
+                    <label class="campo-label">Você utiliza algum dos serviços disponibilizados?</label>
+                    <p class="campo-descricao">Ex: Barbearia, lavanderia, etc.</p>
+                    <div class="opcoes-grupo">
+                        <button type="button" class="opcao-btn" data-name="utiliza_servicos" data-value="Sim">Sim</button>
+                        <button type="button" class="opcao-btn" data-name="utiliza_servicos" data-value="Não">Não</button>
+                    </div>
+                    <div class="condicional" id="lista-servicos" style="display:none;">
+                        <label class="campo-label sub-label">Quais serviços você utiliza?</label>
+                        <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Barbearia"> Barbearia</label>
+                            <label class="check-item"><input type="checkbox" value="Lavanderia"> Lavanderia</label>
+                            <label class="check-item"><input type="checkbox" value="Passadeira de roupa"> Passadeira de roupa</label>
+                            <label class="check-item"><input type="checkbox" value="Lava-Jato"> Lava-Jato</label>
+                            <label class="check-item"><input type="checkbox" value="Posto de abastecimento"> Posto de abastecimento</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 8: Serviços -->
                 <div class="campo" id="campo-servicos">
                     <label class="campo-label">Como você avalia a qualidade dos serviços disponibilizados?</label>
                     <p class="campo-descricao">Ex: Barbearia, lavanderia, etc.</p>
@@ -251,6 +296,11 @@
                             <label class="check-item"><input type="checkbox" value="Ambiente sujo ou mal cuidado"> Ambiente sujo ou mal cuidado</label>
                             <label class="check-item"><input type="checkbox" value="Atendimento ruim do prestador"> Atendimento ruim do prestador</label>
                         </div>
+                    </div>
+                    <!-- Lógica ativa: nota ≥4 -->
+                    <div class="condicional" id="agradou-servicos" style="display:none;">
+                        <label class="campo-label sub-label">O que mais te agradou?</label>
+                        <textarea id="agradou-servicos-text" class="textarea" rows="2" placeholder="Opcional..."></textarea>
                     </div>
                 </div>
 
@@ -328,9 +378,9 @@
             <div class="container">
                 <h2 class="tela-titulo">Espaço Livre</h2>
 
-                <!-- Pergunta 10: Sugestões -->
+                <!-- Pergunta 11: O que mais poderíamos melhorar? -->
                 <div class="campo">
-                    <label class="campo-label">Elogios ou sugestões de melhoria</label>
+                    <label class="campo-label">O que mais poderíamos melhorar?</label>
                     <p class="campo-descricao">Este campo é opcional</p>
                     <textarea id="sugestoes" class="textarea" rows="5" placeholder="Deixe aqui seu comentário, elogio ou sugestão..."></textarea>
                 </div>
