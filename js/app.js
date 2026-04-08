@@ -185,11 +185,22 @@ function inicializarOpcoes() {
             // Lógica condicional para utilização de serviços
             if (name === 'utiliza_servicos') {
                 const listaServicos = document.getElementById('lista-servicos');
+                const campoServicos = document.getElementById('campo-servicos');
                 if (btn.dataset.value === 'Sim') {
                     listaServicos.style.display = 'block';
+                    campoServicos.style.display = 'block';
                 } else {
                     listaServicos.style.display = 'none';
                     listaServicos.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+                    campoServicos.style.display = 'none';
+                    // Limpar resposta e condicionais de serviços
+                    delete state.respostas.servicos;
+                    const rating = campoServicos.querySelector('.star-rating');
+                    if (rating) rating.querySelectorAll('.star').forEach(s => s.classList.remove('ativa'));
+                    const motivoServicos = document.getElementById('motivo-servicos');
+                    const agradouServicos = document.getElementById('agradou-servicos');
+                    if (motivoServicos) motivoServicos.style.display = 'none';
+                    if (agradouServicos) agradouServicos.style.display = 'none';
                 }
             }
 
@@ -321,7 +332,8 @@ function validarTela(numTela) {
             valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras && state.respostas.circulacao_clara;
             break;
         case 3:
-            valido = state.respostas.limpeza && state.respostas.restaurante && state.respostas.utiliza_servicos && state.respostas.servicos;
+            valido = state.respostas.limpeza && state.respostas.restaurante && state.respostas.utiliza_servicos &&
+                     (state.respostas.utiliza_servicos === 'Não' || state.respostas.servicos);
             break;
         case 4:
             valido = state.respostas.seguranca !== undefined && state.respostas.nps !== undefined;
@@ -631,8 +643,12 @@ function restaurarUI() {
             }
 
             if (name === 'utiliza_servicos') {
+                const campoServicos = document.getElementById('campo-servicos');
                 if (state.respostas[name] === 'Sim') {
                     document.getElementById('lista-servicos').style.display = 'block';
+                    campoServicos.style.display = 'block';
+                } else {
+                    campoServicos.style.display = 'none';
                 }
             }
         }
