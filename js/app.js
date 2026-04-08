@@ -2,8 +2,8 @@
 const CONFIG = {
     // URL do Power Automate HTTP Trigger (substituir pela URL real)
     POWER_AUTOMATE_URL: '',
-    // Tempo de bloqueio em milissegundos (12 horas)
-    BLOQUEIO_MS: 12 * 60 * 60 * 1000,
+    // Tempo de bloqueio em milissegundos (48 horas)
+    BLOQUEIO_MS: 48 * 60 * 60 * 1000,
     // Chaves do localStorage
     STORAGE_KEY: 'elog_pesquisa',
     FINGERPRINT_KEY: 'elog_fingerprint',
@@ -408,6 +408,7 @@ function coletarTodosOsDados() {
         servicos: state.respostas.servicos || null,
         motivos_servicos: coletarMotivos('motivo-servicos'),
         agradou_servicos: document.getElementById('agradou-servicos-text')?.value.trim() || '',
+        sugestao_servicos_convenio: document.getElementById('sugestao-servicos-text')?.value.trim() || '',
 
         // Segurança e NPS
         seguranca: state.respostas.seguranca || '',
