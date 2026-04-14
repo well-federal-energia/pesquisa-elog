@@ -42,18 +42,40 @@
             <div class="container">
                 <h2 class="tela-titulo">Identificação</h2>
 
-                <!-- Pergunta 1: Região de Origem -->
+                <!-- Pergunta 1: UF de Origem -->
                 <div class="campo" id="campo-regiao">
-                    <label class="campo-label">Qual a sua região de origem?</label>
-                    <div class="select-wrapper">
-                        <select id="regiao" required>
-                            <option value="">Selecione sua região</option>
-                            <option value="Norte">Norte</option>
-                            <option value="Nordeste">Nordeste</option>
-                            <option value="Centro-Oeste">Centro-Oeste</option>
-                            <option value="Sudeste">Sudeste</option>
-                            <option value="Sul">Sul</option>
-                        </select>
+                    <label class="campo-label">Qual a sua UF de origem?</label>
+                    <div class="select-wrapper uf-wrapper">
+                        <input id="regiao" class="uf-input" type="text" list="ufs-lista" maxlength="2" placeholder="Digite ou pesquise a UF" autocomplete="off" required>
+                        <datalist id="ufs-lista">
+                            <option value="AC"></option>
+                            <option value="AL"></option>
+                            <option value="AP"></option>
+                            <option value="AM"></option>
+                            <option value="BA"></option>
+                            <option value="CE"></option>
+                            <option value="DF"></option>
+                            <option value="ES"></option>
+                            <option value="GO"></option>
+                            <option value="MA"></option>
+                            <option value="MT"></option>
+                            <option value="MS"></option>
+                            <option value="MG"></option>
+                            <option value="PA"></option>
+                            <option value="PB"></option>
+                            <option value="PR"></option>
+                            <option value="PE"></option>
+                            <option value="PI"></option>
+                            <option value="RJ"></option>
+                            <option value="RN"></option>
+                            <option value="RS"></option>
+                            <option value="RO"></option>
+                            <option value="RR"></option>
+                            <option value="SC"></option>
+                            <option value="SP"></option>
+                            <option value="SE"></option>
+                            <option value="TO"></option>
+                        </datalist>
                     </div>
                 </div>
 
@@ -99,18 +121,6 @@
                             </svg>
                             <span>Bitrem / Rodotrem</span>
                         </button>
-                        <button class="veiculo-btn" data-value="Outro" type="button">
-                            <svg viewBox="0 0 64 44" class="veiculo-icon">
-                                <rect x="8" y="12" width="48" height="20" rx="3" fill="currentColor"/>
-                                <circle cx="22" cy="36" r="5" fill="#333"/><circle cx="22" cy="36" r="2.5" fill="#999"/>
-                                <circle cx="42" cy="36" r="5" fill="#333"/><circle cx="42" cy="36" r="2.5" fill="#999"/>
-                                <text x="32" y="26" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">?</text>
-                            </svg>
-                            <span>Outro</span>
-                        </button>
-                    </div>
-                    <div class="veiculo-outro-input" id="veiculo-outro-wrapper" style="display:none;">
-                        <input type="text" id="veiculo-outro-text" class="input-outro" placeholder="Digite o tipo do veículo...">
                     </div>
                 </div>
 

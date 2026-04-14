@@ -10,6 +10,12 @@ const CONFIG = {
     QUEUE_KEY: 'elog_queue'
 };
 
+const UFS_VALIDAS = new Set([
+    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO',
+    'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI',
+    'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+]);
+
 // ===== ESTADO DA APLICAÇÃO =====
 const state = {
     telaAtual: 1,
@@ -89,41 +95,43 @@ function inicializarComponentes() {
     inicializarSelect();
 }
 
+function normalizarUF(valor) {
+    return (valor || '').trim().toUpperCase();
+}
+
+function isUFValida(valor) {
+    return UFS_VALIDAS.has(normalizarUF(valor));
+}
+
 // --- Select (Região) ---
 function inicializarSelect() {
-    const select = document.getElementById('regiao');
-    select.addEventListener('change', () => {
-        state.respostas.regiao = select.value;
+    const inputUF = document.getElementById('regiao');
+
+    inputUF.addEventListener('input', () => {
+        const uf = normalizarUF(inputUF.value);
+        inputUF.value = uf;
+        state.respostas.regiao = uf;
+        validarTela(1);
+    });
+
+    inputUF.addEventListener('change', () => {
+        const uf = normalizarUF(inputUF.value);
+        inputUF.value = uf;
+        state.respostas.regiao = uf;
         validarTela(1);
     });
 }
 
 // --- Veículos ---
 function inicializarVeiculos() {
-    const outroWrapper = document.getElementById('veiculo-outro-wrapper');
-    const outroInput = document.getElementById('veiculo-outro-text');
-
     document.querySelectorAll('.veiculo-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.veiculo-btn').forEach(b => b.classList.remove('selecionado'));
             btn.classList.add('selecionado');
 
-            if (btn.dataset.value === 'Outro') {
-                outroWrapper.style.display = 'block';
-                outroInput.focus();
-                state.respostas.veiculo = outroInput.value.trim() ? outroInput.value.trim() : '';
-            } else {
-                outroWrapper.style.display = 'none';
-                outroInput.value = '';
-                state.respostas.veiculo = btn.dataset.value;
-            }
+            state.respostas.veiculo = btn.dataset.value;
             validarTela(1);
         });
-    });
-
-    outroInput.addEventListener('input', () => {
-        state.respostas.veiculo = outroInput.value.trim() ? outroInput.value.trim() : '';
-        validarTela(1);
     });
 }
 
@@ -326,7 +334,7 @@ function validarTela(numTela) {
 
     switch (numTela) {
         case 1:
-            valido = state.respostas.regiao && state.respostas.veiculo;
+            valido = isUFValida(state.respostas.regiao) && state.respostas.veiculo;
             break;
         case 2:
             valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras && state.respostas.circulacao_clara;
@@ -387,7 +395,9 @@ function coletarMotivos(containerId) {
         if (cb.classList.contains('check-outro')) {
             const inputOutro = cb.closest('.check-item').querySelector('.input-outro');
             const textoOutro = inputOutro ? inputOutro.value.trim() : '';
-            motivos.push('Outro: ' + textoOutro);
+            if (textoOutro) {
+                motivos.push('Outro: ' + textoOutro);
+            }
         } else {
             motivos.push(cb.value);
         }
@@ -398,7 +408,7 @@ function coletarMotivos(containerId) {
 function coletarTodosOsDados() {
     return {
         // Identificação
-        regiao: state.respostas.regiao || '',
+        regiao: normalizarUF(state.respostas.regiao),
         veiculo: state.respostas.veiculo || '',
 
         // Atendimento
@@ -442,7 +452,9 @@ async function enviarPesquisa() {
     if (state.enviado) return;
 
     const loading = document.getElementById('loading-overlay');
-    loading.style.display = 'flex';
+    if (loading) {
+        loading.style.display = 'flex';
+    }
 
     // Coletar sugestões (tela 5)
     const dados = coletarTodosOsDados();
@@ -453,7 +465,9 @@ async function enviarPesquisa() {
         registrarEnvio();
         limparRascunho();
 
-        loading.style.display = 'none';
+        if (loading) {
+            loading.style.display = 'none';
+        }
 
         // Esconder progresso e tela 5
         document.querySelector('.progress-wrapper').style.display = 'none';
@@ -467,7 +481,9 @@ async function enviarPesquisa() {
         registrarEnvio();
         limparRascunho();
 
-        loading.style.display = 'none';
+        if (loading) {
+            loading.style.display = 'none';
+        }
 
         document.querySelector('.progress-wrapper').style.display = 'none';
         document.getElementById('tela-5').classList.remove('tela-ativa');
@@ -524,30 +540,30 @@ function adicionarFilaOffline(dados) {
     }
 }
 
-function sincronizarFilaOffline() {
+async function sincronizarFilaOffline() {
     if (!CONFIG.POWER_AUTOMATE_URL) return;
 
     try {
         const fila = JSON.parse(localStorage.getItem(CONFIG.QUEUE_KEY) || '[]');
         if (fila.length === 0) return;
 
-        const novaFila = [];
-
-        fila.forEach(dados => {
-            fetch(CONFIG.POWER_AUTOMATE_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
-            }).then(response => {
-                if (!response.ok) {
-                    novaFila.push(dados);
+        const resultados = await Promise.all(
+            fila.map(async (dados) => {
+                try {
+                    const response = await fetch(CONFIG.POWER_AUTOMATE_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                    return response.ok;
+                } catch {
+                    return false;
                 }
-                localStorage.setItem(CONFIG.QUEUE_KEY, JSON.stringify(novaFila));
-            }).catch(() => {
-                novaFila.push(dados);
-                localStorage.setItem(CONFIG.QUEUE_KEY, JSON.stringify(novaFila));
-            });
-        });
+            })
+        );
+
+        const novaFila = fila.filter((_, idx) => !resultados[idx]);
+        localStorage.setItem(CONFIG.QUEUE_KEY, JSON.stringify(novaFila));
     } catch (e) {
         console.error('Erro ao sincronizar fila:', e);
     }
@@ -599,16 +615,24 @@ function limparRascunho() {
 function restaurarUI() {
     // Região
     if (state.respostas.regiao) {
-        document.getElementById('regiao').value = state.respostas.regiao;
+        const uf = normalizarUF(state.respostas.regiao);
+        document.getElementById('regiao').value = uf;
+        state.respostas.regiao = uf;
     }
 
     // Veículo
     if (state.respostas.veiculo) {
+        let veiculoSelecionado = false;
         document.querySelectorAll('.veiculo-btn').forEach(btn => {
             if (btn.dataset.value === state.respostas.veiculo) {
                 btn.classList.add('selecionado');
+                veiculoSelecionado = true;
             }
         });
+
+        if (!veiculoSelecionado) {
+            state.respostas.veiculo = '';
+        }
     }
 
     // Star ratings

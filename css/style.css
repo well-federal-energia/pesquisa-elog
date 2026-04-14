@@ -194,6 +194,10 @@ body {
     font-size: 1.2rem;
 }
 
+.uf-wrapper::after {
+    display: none;
+}
+
 select {
     width: 100%;
     padding: 14px 40px 14px 14px;
@@ -208,6 +212,23 @@ select {
 }
 
 select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.uf-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    color: var(--text);
+    transition: border-color var(--transition);
+    text-transform: uppercase;
+}
+
+.uf-input:focus {
     outline: none;
     border-color: var(--primary);
 }
