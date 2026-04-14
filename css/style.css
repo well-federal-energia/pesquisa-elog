@@ -1,5 +1,4 @@
 /* ===== VARIÁVEIS ===== */
-/*teste*/
 
 :root {
     --primary: #E67E22;
@@ -317,6 +316,12 @@ select:focus {
     gap: 10px;
 }
 
+.opcoes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
 .opcao-btn {
     flex: 1;
     padding: 12px 8px;
@@ -610,6 +615,17 @@ select:focus {
     color: var(--text-light);
 }
 
+.voucher-msg {
+    margin-top: 16px;
+    background: #E9F9EF;
+    border: 1px solid #BDECCB;
+    color: #1F6D3F;
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
 /* ===== TELA BLOQUEIO ===== */
 .bloqueio-container {
     display: flex;
@@ -714,6 +730,10 @@ select:focus {
     .opcoes-grupo {
         flex-direction: column;
         gap: 8px;
+    }
+
+    .opcoes-grid {
+        grid-template-columns: 1fr;
     }
 }
 

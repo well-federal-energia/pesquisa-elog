@@ -7,7 +7,9 @@ const CONFIG = {
     // Chaves do localStorage
     STORAGE_KEY: 'elog_pesquisa',
     FINGERPRINT_KEY: 'elog_fingerprint',
-    QUEUE_KEY: 'elog_queue'
+    QUEUE_KEY: 'elog_queue',
+    RESPONSE_COUNT_KEY: 'elog_response_count',
+    VOUCHER_INTERVAL: 50
 };
 
 const UFS_VALIDAS = new Set([
@@ -91,6 +93,7 @@ function inicializarComponentes() {
     inicializarOpcoes();
     inicializarNPS();
     inicializarCheckOutros();
+    inicializarChecklistValidacao();
     inicializarBotoes();
     inicializarSelect();
 }
@@ -183,7 +186,7 @@ function inicializarOpcoes() {
             // Lógica condicional para segurança
             if (name === 'seguranca') {
                 const motivo = document.getElementById('motivo-seguranca');
-                if (btn.dataset.value === 'Não' || btn.dataset.value === 'Parcialmente') {
+                if (btn.dataset.value === 'Não') {
                     motivo.style.display = 'block';
                 } else {
                     motivo.style.display = 'none';
@@ -193,25 +196,22 @@ function inicializarOpcoes() {
             // Lógica condicional para utilização de serviços
             if (name === 'utiliza_servicos') {
                 const listaServicos = document.getElementById('lista-servicos');
-                const campoServicos = document.getElementById('campo-servicos');
                 if (btn.dataset.value === 'Sim') {
                     listaServicos.style.display = 'block';
-                    campoServicos.style.display = 'block';
                 } else {
                     listaServicos.style.display = 'none';
                     listaServicos.querySelectorAll('input[type="checkbox"]').forEach(cb => { cb.checked = false; });
-                    campoServicos.style.display = 'none';
-                    // Limpar resposta e condicionais de serviços
-                    delete state.respostas.servicos;
-                    const rating = campoServicos.querySelector('.star-rating');
-                    if (rating) rating.querySelectorAll('.star').forEach(s => s.classList.remove('ativa'));
-                    const motivoServicos = document.getElementById('motivo-servicos');
-                    const agradouServicos = document.getElementById('agradou-servicos');
-                    if (motivoServicos) motivoServicos.style.display = 'none';
-                    if (agradouServicos) agradouServicos.style.display = 'none';
                 }
             }
 
+            validarTelaAtual();
+        });
+    });
+}
+
+function inicializarChecklistValidacao() {
+    document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', () => {
             validarTelaAtual();
         });
     });
@@ -288,8 +288,7 @@ function tratarLogicaCondicional(name, valor) {
     const mapa = {
         'atendimento_recepcao': { motivo: 'motivo-atendimento', agradou: 'agradou-atendimento' },
         'limpeza':              { motivo: 'motivo-limpeza',      agradou: 'agradou-limpeza' },
-        'restaurante':          { motivo: 'motivo-restaurante',  agradou: 'agradou-restaurante' },
-        'servicos':             { motivo: 'motivo-servicos',     agradou: 'agradou-servicos' }
+        'restaurante':          { motivo: 'motivo-restaurante',  agradou: 'agradou-restaurante' }
     };
 
     const ids = mapa[name];
@@ -334,17 +333,17 @@ function validarTela(numTela) {
 
     switch (numTela) {
         case 1:
-            valido = isUFValida(state.respostas.regiao) && state.respostas.veiculo;
+            valido = isUFValida(state.respostas.regiao) && state.respostas.veiculo && state.respostas.segmento_carga;
             break;
         case 2:
             valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras && state.respostas.circulacao_clara;
             break;
         case 3:
             valido = state.respostas.limpeza && state.respostas.restaurante && state.respostas.utiliza_servicos &&
-                     (state.respostas.utiliza_servicos === 'Não' || state.respostas.servicos);
+                     (state.respostas.utiliza_servicos === 'Não' || coletarServicosSelecionados().length > 0);
             break;
         case 4:
-            valido = state.respostas.seguranca !== undefined && state.respostas.nps !== undefined;
+            valido = state.respostas.seguranca !== undefined && state.respostas.nps !== undefined && state.respostas.implantacao_patios;
             break;
     }
 
@@ -405,11 +404,24 @@ function coletarMotivos(containerId) {
     return motivos;
 }
 
+function coletarServicosSelecionados() {
+    const container = document.getElementById('lista-servicos');
+    if (!container || container.style.display === 'none') return [];
+
+    const servicos = [];
+    container.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        servicos.push(cb.value);
+    });
+
+    return servicos;
+}
+
 function coletarTodosOsDados() {
     return {
         // Identificação
         regiao: normalizarUF(state.respostas.regiao),
         veiculo: state.respostas.veiculo || '',
+        segmento_carga: state.respostas.segmento_carga || '',
 
         // Atendimento
         atendimento_recepcao: state.respostas.atendimento_recepcao || null,
@@ -426,11 +438,7 @@ function coletarTodosOsDados() {
         motivos_restaurante: coletarMotivos('motivo-restaurante'),
         agradou_restaurante: document.getElementById('agradou-restaurante-text')?.value.trim() || '',
         utiliza_servicos: state.respostas.utiliza_servicos || '',
-        servicos_utilizados: coletarMotivos('lista-servicos'),
-        servicos: state.respostas.servicos || null,
-        motivos_servicos: coletarMotivos('motivo-servicos'),
-        agradou_servicos: document.getElementById('agradou-servicos-text')?.value.trim() || '',
-        sugestao_servicos_convenio: document.getElementById('sugestao-servicos-text')?.value.trim() || '',
+        servicos_utilizados: coletarServicosSelecionados(),
 
         // Segurança e NPS
         seguranca: state.respostas.seguranca || '',
@@ -438,6 +446,7 @@ function coletarTodosOsDados() {
         nps: state.respostas.nps !== undefined ? state.respostas.nps : null,
         motivo_nps_detrator: document.getElementById('motivo-detrator')?.value.trim() || '',
         motivo_nps_promotor: document.getElementById('motivo-promotor')?.value.trim() || '',
+        implantacao_patios: state.respostas.implantacao_patios || null,
 
         // Sugestões
         sugestoes: document.getElementById('sugestoes')?.value.trim() || '',
@@ -458,6 +467,9 @@ async function enviarPesquisa() {
 
     // Coletar sugestões (tela 5)
     const dados = coletarTodosOsDados();
+    dados.voucher_ganho = registrarParticipacaoEVerificarVoucher();
+    dados.voucher_intervalo = CONFIG.VOUCHER_INTERVAL;
+    dados.programa_incentivo_atendentes = dados.voucher_ganho ? 'Acionado' : 'Não acionado';
 
     try {
         await enviarParaPowerAutomate(dados);
@@ -473,6 +485,7 @@ async function enviarPesquisa() {
         document.querySelector('.progress-wrapper').style.display = 'none';
         document.getElementById('tela-5').classList.remove('tela-ativa');
         document.getElementById('tela-obrigado').classList.add('tela-ativa');
+        exibirMensagemVoucher(dados.voucher_ganho);
 
     } catch (err) {
         // Salvar na fila offline
@@ -488,6 +501,30 @@ async function enviarPesquisa() {
         document.querySelector('.progress-wrapper').style.display = 'none';
         document.getElementById('tela-5').classList.remove('tela-ativa');
         document.getElementById('tela-obrigado').classList.add('tela-ativa');
+        exibirMensagemVoucher(dados.voucher_ganho);
+    }
+}
+
+function registrarParticipacaoEVerificarVoucher() {
+    try {
+        const atual = parseInt(localStorage.getItem(CONFIG.RESPONSE_COUNT_KEY) || '0', 10);
+        const novoTotal = atual + 1;
+        localStorage.setItem(CONFIG.RESPONSE_COUNT_KEY, String(novoTotal));
+        return novoTotal % CONFIG.VOUCHER_INTERVAL === 0;
+    } catch {
+        return false;
+    }
+}
+
+function exibirMensagemVoucher(ganhouVoucher) {
+    const elVoucher = document.getElementById('voucher-msg');
+    if (!elVoucher) return;
+
+    if (ganhouVoucher) {
+        elVoucher.textContent = 'Parabéns. Você ganhou um voucher de serviço no E-log. Procure o atendimento para resgatar.';
+        elVoucher.style.display = 'block';
+    } else {
+        elVoucher.style.display = 'none';
     }
 }
 
@@ -636,7 +673,7 @@ function restaurarUI() {
     }
 
     // Star ratings
-    ['atendimento_recepcao', 'limpeza', 'restaurante', 'servicos'].forEach(name => {
+    ['atendimento_recepcao', 'limpeza', 'restaurante', 'implantacao_patios'].forEach(name => {
         if (state.respostas[name]) {
             const rating = document.querySelector(`.star-rating[data-name="${name}"]`);
             if (rating) {
@@ -651,7 +688,7 @@ function restaurarUI() {
     });
 
     // Opções (Sim/Parcialmente/Não)
-    ['conhece_regras', 'circulacao_clara', 'utiliza_servicos', 'seguranca'].forEach(name => {
+    ['segmento_carga', 'conhece_regras', 'circulacao_clara', 'utiliza_servicos', 'seguranca'].forEach(name => {
         if (state.respostas[name]) {
             document.querySelectorAll(`.opcao-btn[data-name="${name}"]`).forEach(btn => {
                 if (btn.dataset.value === state.respostas[name]) {
@@ -661,18 +698,14 @@ function restaurarUI() {
 
             if (name === 'seguranca') {
                 const val = state.respostas[name];
-                if (val === 'Não' || val === 'Parcialmente') {
+                if (val === 'Não') {
                     document.getElementById('motivo-seguranca').style.display = 'block';
                 }
             }
 
             if (name === 'utiliza_servicos') {
-                const campoServicos = document.getElementById('campo-servicos');
                 if (state.respostas[name] === 'Sim') {
                     document.getElementById('lista-servicos').style.display = 'block';
-                    campoServicos.style.display = 'block';
-                } else {
-                    campoServicos.style.display = 'none';
                 }
             }
         }

@@ -124,6 +124,17 @@
                     </div>
                 </div>
 
+                <!-- Pergunta 3: Segmento de carga -->
+                <div class="campo" id="campo-segmento-carga">
+                    <label class="campo-label">Qual o seu segmento de carga?</label>
+                    <div class="opcoes-grid">
+                        <button type="button" class="opcao-btn" data-name="segmento_carga" data-value="Cegonha">Cegonha</button>
+                        <button type="button" class="opcao-btn" data-name="segmento_carga" data-value="Transporte de combustível">Transporte de combustível</button>
+                        <button type="button" class="opcao-btn" data-name="segmento_carga" data-value="Transporte de Container">Transporte de Container</button>
+                        <button type="button" class="opcao-btn" data-name="segmento_carga" data-value="Carga geral">Carga geral</button>
+                    </div>
+                </div>
+
                 <button class="btn-proximo" id="btn-tela1" type="button" disabled>PRÓXIMO</button>
             </div>
         </div>
@@ -149,11 +160,11 @@
                     </div>
                     <!-- Lógica ativa: nota ≤3 -->
                     <div class="condicional" id="motivo-atendimento" style="display:none;">
-                        <label class="campo-label sub-label">Selecione o motivo:</label>
+                        <label class="campo-label sub-label">Selecione o motivo da sua insatisfação:</label>
                         <div class="checklist">
-                            <label class="check-item"><input type="checkbox" value="Demora na Triagem"> Demora na Triagem</label>
-                            <label class="check-item"><input type="checkbox" value="Atendimento ríspido"> Atendimento ríspido</label>
-                            <label class="check-item"><input type="checkbox" value="Problemas no sistema"> Problemas no sistema</label>
+                            <label class="check-item"><input type="checkbox" value="Demora na liberação da minha triagem"> Demora na liberação da minha triagem</label>
+                            <label class="check-item"><input type="checkbox" value="Atendimento do colaborador"> Atendimento do colaborador</label>
+                            <label class="check-item"><input type="checkbox" value="Lentidão no meu atendimento"> Lentidão no meu atendimento</label>
                             <label class="check-item">
                                 <input type="checkbox" value="Outro" class="check-outro">
                                 Outro:
@@ -173,7 +184,6 @@
                     <label class="campo-label">Você conhece as informações e regras de segurança do pátio?</label>
                     <div class="opcoes-grupo">
                         <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Sim">Sim</button>
-                        <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Parcialmente">Parcialmente</button>
                         <button type="button" class="opcao-btn" data-name="conhece_regras" data-value="Não">Não</button>
                     </div>
                 </div>
@@ -183,7 +193,6 @@
                     <label class="campo-label">As regras de circulação estavam claras?</label>
                     <div class="opcoes-grupo">
                         <button type="button" class="opcao-btn" data-name="circulacao_clara" data-value="Sim">Sim</button>
-                        <button type="button" class="opcao-btn" data-name="circulacao_clara" data-value="Parcialmente">Parcialmente</button>
                         <button type="button" class="opcao-btn" data-name="circulacao_clara" data-value="Não">Não</button>
                     </div>
                 </div>
@@ -199,8 +208,8 @@
 
                 <!-- Pergunta 5: Limpeza áreas comuns -->
                 <div class="campo" id="campo-limpeza">
-                    <label class="campo-label">Como você avalia a limpeza e conservação das áreas comuns?</label>
-                    <p class="campo-descricao">Banheiros, pátio, refeitório e áreas de descanso</p>
+                    <label class="campo-label">Como você avalia a limpeza e a conservação das áreas comuns do E-log?</label>
+                    <p class="campo-descricao">Banheiros, pátio de estacionamento, restaurante e áreas de descanso</p>
                     <div class="star-rating" data-name="limpeza">
                         <button type="button" class="star" data-value="1" title="Péssima">★</button>
                         <button type="button" class="star" data-value="2" title="Ruim">★</button>
@@ -213,12 +222,13 @@
                         <span>Impecável</span>
                     </div>
                     <div class="condicional" id="motivo-limpeza" style="display:none;">
-                        <label class="campo-label sub-label">Qual área precisa melhorar?</label>
+                        <label class="campo-label sub-label">Selecione o motivo da sua insatisfação:</label>
                         <div class="checklist">
-                            <label class="check-item"><input type="checkbox" value="Banheiros e Chuveiros (Sujeira/Falta de materiais)"> Banheiros e Chuveiros</label>
-                            <label class="check-item"><input type="checkbox" value="Pátio e Estacionamento (Lixo/Resíduos)"> Pátio e Estacionamento</label>
-                            <label class="check-item"><input type="checkbox" value="Refeitório e Áreas de Refeição"> Refeitório e Áreas de Refeição</label>
+                            <label class="check-item"><input type="checkbox" value="Banheiros (Sujeira/Falta de materiais)"> Banheiros (Sujeira/Falta de materiais)</label>
+                            <label class="check-item"><input type="checkbox" value="Pátio de Estacionamento (Lixo/Resíduos)"> Pátio de Estacionamento (Lixo/Resíduos)</label>
+                            <label class="check-item"><input type="checkbox" value="Restaurante"> Restaurante</label>
                             <label class="check-item"><input type="checkbox" value="Salas de Espera e Corredores"> Salas de Espera e Corredores</label>
+                            <label class="check-item"><input type="checkbox" value="Recepção"> Recepção</label>
                             <label class="check-item">
                                 <input type="checkbox" value="Outro" class="check-outro">
                                 Outro:
@@ -236,7 +246,7 @@
                 <!-- Pergunta 6: Restaurante -->
                 <div class="campo" id="campo-restaurante">
                     <label class="campo-label">Como você avalia a sua experiência geral no restaurante?</label>
-                    <p class="campo-descricao">Considere comida, atendimento e ambiente</p>
+                    <p class="campo-descricao">Considere qualidade, atendimento e ambiente</p>
                     <div class="star-rating" data-name="restaurante">
                         <button type="button" class="star" data-value="1" title="Muito Ruim">★</button>
                         <button type="button" class="star" data-value="2" title="Ruim">★</button>
@@ -249,12 +259,17 @@
                         <span>Excelente</span>
                     </div>
                     <div class="condicional" id="motivo-restaurante" style="display:none;">
-                        <label class="campo-label sub-label">Selecione o motivo:</label>
+                        <label class="campo-label sub-label">Selecione o motivo da sua insatisfação:</label>
                         <div class="checklist">
                             <label class="check-item"><input type="checkbox" value="Pouca variedade"> Pouca variedade</label>
                             <label class="check-item"><input type="checkbox" value="Baixa qualidade"> Baixa qualidade</label>
                             <label class="check-item"><input type="checkbox" value="Ambiente desconfortável"> Ambiente desconfortável</label>
                             <label class="check-item"><input type="checkbox" value="Mal atendimento"> Mal atendimento</label>
+                            <label class="check-item">
+                                <input type="checkbox" value="Outro" class="check-outro">
+                                Outro:
+                                <input type="text" class="input-outro" placeholder="Especifique..." disabled>
+                            </label>
                         </div>
                     </div>
                     <!-- Lógica ativa: nota ≥4 -->
@@ -266,8 +281,8 @@
 
                 <!-- Pergunta 7: Você utiliza serviços? -->
                 <div class="campo" id="campo-utiliza-servicos">
-                    <label class="campo-label">Você já utilizou algum dos serviços de conveniência <strong>localizados no complexo e-log</strong>?</label>
-                    <p class="campo-descricao">Ex: Barbearia, lavanderia, etc.</p>
+                    <label class="campo-label">Você já utilizou algum dos serviços de conveniência localizados no Pátio E-log?</label>
+                    <p class="campo-descricao">Ex: Lavanderia, Barbearia, Sala de Jogos, etc.</p>
                     <div class="opcoes-grupo">
                         <button type="button" class="opcao-btn" data-name="utiliza_servicos" data-value="Sim">Sim</button>
                         <button type="button" class="opcao-btn" data-name="utiliza_servicos" data-value="Não">Não</button>
@@ -275,50 +290,25 @@
                     <div class="condicional" id="lista-servicos" style="display:none;">
                         <label class="campo-label sub-label">Quais serviços você utiliza?</label>
                         <div class="checklist">
+                            <label class="check-item"><input type="checkbox" value="Lava Rápido"> Lava Rápido</label>
+                            <label class="check-item"><input type="checkbox" value="Concessionária Volvo Gotemburgo"> Concessionária Volvo Gotemburgo</label>
                             <label class="check-item"><input type="checkbox" value="Barbearia"> Barbearia</label>
                             <label class="check-item"><input type="checkbox" value="Lavanderia"> Lavanderia</label>
-                            <label class="check-item"><input type="checkbox" value="Passadeira de roupa"> Passadeira de roupa</label>
-                            <label class="check-item"><input type="checkbox" value="Lava-Jato"> Lava-Jato</label>
-                            <label class="check-item"><input type="checkbox" value="Posto de abastecimento"> Posto de abastecimento</label>
+                            <label class="check-item"><input type="checkbox" value="Loja de EPI"> Loja de EPI</label>
+                            <label class="check-item"><input type="checkbox" value="Restaurante 24h"> Restaurante 24h</label>
+                            <label class="check-item"><input type="checkbox" value="Loja de Conveniência"> Loja de Conveniência</label>
+                            <label class="check-item"><input type="checkbox" value="Salão de Jogos"> Salão de Jogos</label>
+                            <label class="check-item"><input type="checkbox" value="Sala de Descanso"> Sala de Descanso</label>
+                            <label class="check-item"><input type="checkbox" value="Loja de Perfume"> Loja de Perfume</label>
+                            <label class="check-item"><input type="checkbox" value="Cadeira de Massagem"> Cadeira de Massagem</label>
+                            <label class="check-item"><input type="checkbox" value="Caixa eletrônico"> Caixa eletrônico</label>
+                            <label class="check-item"><input type="checkbox" value="Salas de Reuniões"> Salas de Reuniões</label>
+                            <label class="check-item"><input type="checkbox" value="Loja de Seguros"> Loja de Seguros</label>
+                            <label class="check-item"><input type="checkbox" value="Salas para Locação"> Salas para Locação</label>
+                            <label class="check-item"><input type="checkbox" value="Pesque e Leve"> Pesque e Leve</label>
+                            <label class="check-item"><input type="checkbox" value="Inspeção para Certificação de Produto"> Inspeção para Certificação de Produto</label>
                         </div>
                     </div>
-                </div>
-
-                <!-- Pergunta 8: Serviços -->
-                <div class="campo" id="campo-servicos">
-                    <label class="campo-label">Como você avalia a qualidade dos serviços de conveniência <strong>localizados no complexo e-log?</strong></label>
-                    <p class="campo-descricao">Ex: Barbearia, lavanderia, etc.</p>
-                    <div class="star-rating" data-name="servicos">
-                        <button type="button" class="star" data-value="1" title="Muito Ruim">★</button>
-                        <button type="button" class="star" data-value="2" title="Ruim">★</button>
-                        <button type="button" class="star" data-value="3" title="Regular">★</button>
-                        <button type="button" class="star" data-value="4" title="Bom">★</button>
-                        <button type="button" class="star" data-value="5" title="Excelente">★</button>
-                    </div>
-                    <div class="star-labels">
-                        <span>Muito Ruim</span>
-                        <span>Excelente</span>
-                    </div>
-                    <div class="condicional" id="motivo-servicos" style="display:none;">
-                        <label class="campo-label sub-label">Selecione o motivo:</label>
-                        <div class="checklist">
-                            <label class="check-item"><input type="checkbox" value="Equipamentos estragados ou indisponíveis"> Equipamentos estragados ou indisponíveis</label>
-                            <label class="check-item"><input type="checkbox" value="Tempo de espera muito longo"> Tempo de espera muito longo</label>
-                            <label class="check-item"><input type="checkbox" value="Ambiente sujo ou mal cuidado"> Ambiente sujo ou mal cuidado</label>
-                            <label class="check-item"><input type="checkbox" value="Atendimento ruim do prestador"> Atendimento ruim do prestador</label>
-                        </div>
-                    </div>
-                    <!-- Lógica ativa: nota ≥4 -->
-                    <div class="condicional" id="agradou-servicos" style="display:none;">
-                        <label class="campo-label sub-label">O que mais te agradou?</label>
-                        <textarea id="agradou-servicos-text" class="textarea" rows="2" placeholder="Opcional..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Pergunta extra: Sugestão de serviços -->
-                <div class="campo" id="campo-sugestao-servicos">
-                    <label class="campo-label">Quais outros serviços de conveniência você gostaria de encontrar no complexo e-log? <span class="opcional-badge">Opcional</span></label>
-                    <textarea id="sugestao-servicos-text" class="textarea" rows="3" placeholder="Digite sua sugestão..."></textarea>
                 </div>
 
                 <button class="btn-proximo" id="btn-tela3" type="button" disabled>PRÓXIMO</button>
@@ -335,7 +325,6 @@
                     <label class="campo-label">Você se sente seguro no E-log?</label>
                     <div class="opcoes-grupo">
                         <button type="button" class="opcao-btn" data-name="seguranca" data-value="Sim">Sim</button>
-                        <button type="button" class="opcao-btn" data-name="seguranca" data-value="Parcialmente">Parcialmente</button>
                         <button type="button" class="opcao-btn" data-name="seguranca" data-value="Não">Não</button>
                     </div>
                     <div class="condicional" id="motivo-seguranca" style="display:none;">
@@ -351,6 +340,22 @@
                                 <input type="text" class="input-outro" placeholder="Especifique..." disabled>
                             </label>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 10: Implantação dos pátios -->
+                <div class="campo" id="campo-implantacao-patios">
+                    <label class="campo-label">O que você achou da implantação dos Pátios de Triagem no Porto de Suape - Pernambuco, em comparação com a falta de infraestrutura que não existia antes?</label>
+                    <div class="star-rating" data-name="implantacao_patios">
+                        <button type="button" class="star" data-value="1" title="Muito Pior">★</button>
+                        <button type="button" class="star" data-value="2" title="Pior">★</button>
+                        <button type="button" class="star" data-value="3" title="Regular">★</button>
+                        <button type="button" class="star" data-value="4" title="Melhor">★</button>
+                        <button type="button" class="star" data-value="5" title="Muito Melhor">★</button>
+                    </div>
+                    <div class="star-labels">
+                        <span>Muito Pior</span>
+                        <span>Muito Melhor</span>
                     </div>
                 </div>
 
@@ -413,6 +418,7 @@
                 <h2>Obrigado!</h2>
                 <p class="obrigado-msg">A E-log agradece sua contribuição, motorista.</p>
                 <p class="obrigado-sub">Sua opinião é essencial para melhorarmos nossos serviços.</p>
+                <div class="voucher-msg" id="voucher-msg" style="display:none;"></div>
             </div>
         </div>
     </div>
