@@ -275,8 +275,9 @@ select:focus {
 
 /* ===== STAR RATING ===== */
 .star-rating {
-    display: flex;
-    gap: 6px;
+    display: grid;
+    grid-template-columns: repeat(5, 48px);
+    column-gap: 14px;
     justify-content: center;
     padding: 8px 0;
 }
@@ -288,8 +289,10 @@ select:focus {
     cursor: pointer;
     color: var(--star-empty);
     transition: color 0.15s ease, transform 0.15s ease;
-    padding: 4px;
+    width: 48px;
+    padding: 4px 0;
     line-height: 1;
+    text-align: center;
 }
 
 .star:hover,
@@ -302,12 +305,14 @@ select:focus {
 }
 
 .star-labels {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(5, 48px);
+    column-gap: 14px;
+    justify-content: center;
     font-size: 0.7rem;
     color: var(--text-light);
     margin-top: 4px;
-    padding: 0 4px;
+    text-align: center;
 }
 
 /* ===== OPÇÕES (SIM/PARCIALMENTE/NÃO) ===== */
