@@ -1,7 +1,7 @@
 // ===== CONFIGURAÇÃO =====
 const CONFIG = {
     // URL do Power Automate HTTP Trigger (substituir pela URL real)
-    POWER_AUTOMATE_URL: '',
+    POWER_AUTOMATE_URL: 'https://defaultd6bb317b35fb4332adc9ed6cf14b72.53.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/752d76ae783c4fae94accc0d26333465/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qseAN03j_AJeux2KUzwVUVJU9vtUbWLvMJvRKIOJ6II',
     // Tempo de bloqueio em milissegundos (48 horas)
     BLOQUEIO_MS: 48 * 60 * 60 * 1000,
     // Chaves do localStorage
@@ -270,7 +270,6 @@ function inicializarBotoes() {
         if (btn) {
             btn.addEventListener('click', () => {
                 salvarRascunho();
-                enviarEtapaAsync(i);
                 navegarPara(i + 1);
             });
         }
@@ -439,6 +438,10 @@ function coletarTodosOsDados() {
         agradou_restaurante: document.getElementById('agradou-restaurante-text')?.value.trim() || '',
         utiliza_servicos: state.respostas.utiliza_servicos || '',
         servicos_utilizados: coletarServicosSelecionados(),
+        servicos_avaliacao: state.respostas.servicos || null,
+        motivos_servicos: coletarMotivos('motivo-servicos'),
+        agradou_servicos: document.getElementById('agradou-servicos-text')?.value.trim() || '',
+        sugestao_servicos: document.getElementById('sugestao-servicos-text')?.value.trim() || '',
 
         // Segurança e NPS
         seguranca: state.respostas.seguranca || '',
@@ -452,8 +455,20 @@ function coletarTodosOsDados() {
         sugestoes: document.getElementById('sugestoes')?.value.trim() || '',
 
         // Metadata
+        ip_dispositivo: '',
         timestamp: new Date().toISOString()
     };
+}
+
+// ===== COLETA DE IP =====
+async function coletarIP() {
+    try {
+        const res = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(4000) });
+        const json = await res.json();
+        return json.ip || '';
+    } catch {
+        return '';
+    }
 }
 
 // ===== ENVIO =====
@@ -465,8 +480,9 @@ async function enviarPesquisa() {
         loading.style.display = 'flex';
     }
 
-    // Coletar sugestões (tela 5)
-    const dados = coletarTodosOsDados();
+    // Coletar sugestões (tela 5) e IP do dispositivo
+    const [dados, ip] = await Promise.all([Promise.resolve(coletarTodosOsDados()), coletarIP()]);
+    dados.ip_dispositivo = ip;
     dados.voucher_ganho = registrarParticipacaoEVerificarVoucher();
     dados.voucher_intervalo = CONFIG.VOUCHER_INTERVAL;
     dados.programa_incentivo_atendentes = dados.voucher_ganho ? 'Acionado' : 'Não acionado';

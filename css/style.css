@@ -196,7 +196,7 @@ body {
 }
 
 .uf-wrapper::after {
-    display: none;
+    display: block;
 }
 
 select {
@@ -219,7 +219,7 @@ select:focus {
 
 .uf-input {
     width: 100%;
-    padding: 14px;
+    padding: 14px 40px 14px 14px;
     font-size: 1rem;
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
