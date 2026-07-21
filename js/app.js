@@ -258,6 +258,11 @@ function inicializarCheckOutros() {
             } else {
                 inputOutro.value = '';
             }
+            validarTelaAtual();
+        });
+
+        inputOutro.addEventListener('input', () => {
+            validarTelaAtual();
         });
     });
 }
@@ -335,11 +340,14 @@ function validarTela(numTela) {
             valido = isUFValida(state.respostas.regiao) && state.respostas.veiculo && state.respostas.segmento_carga;
             break;
         case 2:
-            valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras && state.respostas.circulacao_clara;
+            valido = state.respostas.atendimento_recepcao && state.respostas.conhece_regras && state.respostas.circulacao_clara &&
+                     (state.respostas.atendimento_recepcao > 3 || checklistTemJustificativa('motivo-atendimento'));
             break;
         case 3:
             valido = state.respostas.limpeza && state.respostas.restaurante && state.respostas.utiliza_servicos &&
-                     (state.respostas.utiliza_servicos === 'Não' || coletarServicosSelecionados().length > 0);
+                     (state.respostas.utiliza_servicos === 'Não' || coletarServicosSelecionados().length > 0) &&
+                     (state.respostas.limpeza > 3 || checklistTemJustificativa('motivo-limpeza')) &&
+                     (state.respostas.restaurante > 3 || checklistTemJustificativa('motivo-restaurante'));
             break;
         case 4:
             valido = state.respostas.seguranca !== undefined && state.respostas.nps !== undefined && state.respostas.implantacao_patios;
@@ -401,6 +409,27 @@ function coletarMotivos(containerId) {
         }
     });
     return motivos;
+}
+
+function checklistTemJustificativa(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container || container.style.display === 'none') return true;
+
+    let temJustificativa = false;
+    container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        if (!cb.checked) return;
+
+        if (cb.classList.contains('check-outro')) {
+            const inputOutro = cb.closest('.check-item').querySelector('.input-outro');
+            if (inputOutro && inputOutro.value.trim()) {
+                temJustificativa = true;
+            }
+        } else {
+            temJustificativa = true;
+        }
+    });
+
+    return temJustificativa;
 }
 
 function coletarServicosSelecionados() {
