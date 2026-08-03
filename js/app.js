@@ -392,6 +392,17 @@ function atualizarProgresso() {
 }
 
 // ===== COLETA DE DADOS =====
+function formatarCampoMultiplaEscolha(valores) {
+    const itens = (valores || []).filter(Boolean);
+
+    if (itens.length === 0) {
+        return '[]';
+    }
+
+    const formatado = itens.map(item => `"${String(item).replace(/"/g, '\\"')}"`).join('; ');
+    return `[${formatado}]`;
+}
+
 function coletarMotivos(containerId) {
     const container = document.getElementById(containerId);
     if (!container || container.style.display === 'none') return [];
@@ -453,28 +464,28 @@ function coletarTodosOsDados() {
 
         // Atendimento
         atendimento_recepcao: state.respostas.atendimento_recepcao || null,
-        motivos_atendimento: coletarMotivos('motivo-atendimento'),
+        motivos_atendimento: formatarCampoMultiplaEscolha(coletarMotivos('motivo-atendimento')),
         agradou_atendimento: document.getElementById('agradou-atendimento-text')?.value.trim() || '',
         conhece_regras: state.respostas.conhece_regras || '',
         circulacao_clara: state.respostas.circulacao_clara || '',
 
         // Infraestrutura
         limpeza: state.respostas.limpeza || null,
-        motivos_limpeza: coletarMotivos('motivo-limpeza'),
+        motivos_limpeza: formatarCampoMultiplaEscolha(coletarMotivos('motivo-limpeza')),
         agradou_limpeza: document.getElementById('agradou-limpeza-text')?.value.trim() || '',
         restaurante: state.respostas.restaurante || null,
-        motivos_restaurante: coletarMotivos('motivo-restaurante'),
+        motivos_restaurante: formatarCampoMultiplaEscolha(coletarMotivos('motivo-restaurante')),
         agradou_restaurante: document.getElementById('agradou-restaurante-text')?.value.trim() || '',
         utiliza_servicos: state.respostas.utiliza_servicos || '',
-        servicos_utilizados: coletarServicosSelecionados(),
+        servicos_utilizados: formatarCampoMultiplaEscolha(coletarServicosSelecionados()),
         servicos_avaliacao: state.respostas.servicos || null,
-        motivos_servicos: coletarMotivos('motivo-servicos'),
+        motivos_servicos: formatarCampoMultiplaEscolha(coletarMotivos('motivo-servicos')),
         agradou_servicos: document.getElementById('agradou-servicos-text')?.value.trim() || '',
         sugestao_servicos: document.getElementById('sugestao-servicos-text')?.value.trim() || '',
 
         // Segurança e NPS
         seguranca: state.respostas.seguranca || '',
-        motivos_seguranca: coletarMotivos('motivo-seguranca'),
+        motivos_seguranca: formatarCampoMultiplaEscolha(coletarMotivos('motivo-seguranca')),
         nps: state.respostas.nps !== undefined ? state.respostas.nps : null,
         motivo_nps_detrator: document.getElementById('motivo-detrator')?.value.trim() || '',
         motivo_nps_promotor: document.getElementById('motivo-promotor')?.value.trim() || '',
